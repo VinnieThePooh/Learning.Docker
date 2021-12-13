@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Docker.Volumes.BindMounts", "Docker.Volumes.BindMounts\Docker.Volumes.BindMounts.csproj", "{EA3E97BB-7396-44B5-B39C-0102C7B571CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{2F989B66-6DBA-42BE-907E-124FD959F53A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F989B66-6DBA-42BE-907E-124FD959F53A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F989B66-6DBA-42BE-907E-124FD959F53A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA3E97BB-7396-44B5-B39C-0102C7B571CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA3E97BB-7396-44B5-B39C-0102C7B571CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA3E97BB-7396-44B5-B39C-0102C7B571CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA3E97BB-7396-44B5-B39C-0102C7B571CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
