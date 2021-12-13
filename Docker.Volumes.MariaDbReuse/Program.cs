@@ -1,12 +1,10 @@
 ﻿using System;
+namespace Docker.Volumes.MariaDbReuse;
 
-namespace Docker.Volumes.MariaDbReuse
+internal class Program
 {
-    internal class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello World!");
-        }
+        Console.WriteLine("Hello World!");
     }
 }
