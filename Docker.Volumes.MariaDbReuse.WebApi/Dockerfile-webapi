@@ -1,0 +1,9 @@
+﻿FROM mcr.microsoft.com/dotnet/sdk:6.0
+WORKDIR /webapi-app
+COPY . .
+
+
+
+
+- MYSQL_ROOT_PASSWORD:${MARIADB_PASSWORD}
+- MARIADB_DB_ConnectionString:${MARIADB_DB}
