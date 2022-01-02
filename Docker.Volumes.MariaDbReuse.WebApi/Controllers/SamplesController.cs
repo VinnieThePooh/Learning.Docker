@@ -1,3 +1,4 @@
+using Docker.Volumes.MariaDbReuse.WebApi.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
 namespace Docker.Volumes.MariaDbReuse.WebApi.Controllers;
 
@@ -18,6 +19,24 @@ public class SamplesController : ControllerBase
     {
         return Ok();
     }
+
+    [HttpGet("start")]
+    public async Task<IActionResult> Start()
+    {
+        return Ok("MariaDb WebApi client is ready!");
+    }
+
+
+    [HttpGet("get-environment")]
+    public async Task<IActionResult> GetEnvironmentVariables()
+    {
+        var conString = Environment.GetEnvironmentVariable("MARIADB_DB_ConnectionString");        
+
+        return Ok(new EnvironmentDto { 
+            ConnectionString = conString,
+        });
+    }
+
 
 
     [HttpPost("add-sample")]

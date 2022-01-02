@@ -2,7 +2,7 @@
 
 x-docker-envs: &x-envs
  environment:
-  - MYSQL_ROOT_PASSWORD:${MARIADB_PASSWORD}
+  - MARIADB_ROOT_PASSWORD:${MARIADB_ROOT_PASSWORD}
   - MARIADB_DB_ConnectionString:${MARIADB_DB}
   - MARIADB_HOST:${MARIADB_HOST}
 
@@ -10,16 +10,20 @@ services:
  db:
   hostname: ${MARIADB_HOST}
   image: mariadb:10.7
-  container_name: db
+  container_name: mariadb
   restart: always
-  <<: x-envs   
+  <<: *x-envs   
   volumes:
    - ./mariadb/data:/var/lib/mysql
  
  webapi-client:
-  image: 
+  build:
+   context: .
+   dockerfile: ./Dockerfile-webapi
   container_name: webapi-client
   restart: always
-  <<: x-envs
+  <<: *x-envs
   ports:   
-   - 8080:8080  
+   - 8080:8080
+  depends_on:
+   - db

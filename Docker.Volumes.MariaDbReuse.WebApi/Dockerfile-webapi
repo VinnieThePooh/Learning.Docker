@@ -1,9 +1,9 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:6.0
+RUN export MARIADB_DB_ConnectionString=${MARIADB_DB_ConnectionString}
+WORKDIR /webapi-app/bin
 WORKDIR /webapi-app
 COPY . .
-
-
-
-
-- MYSQL_ROOT_PASSWORD:${MARIADB_PASSWORD}
-- MARIADB_DB_ConnectionString:${MARIADB_DB}
+RUN dotnet restore ./Docker.Volumes.MariaDbReuse.WebApi.csproj
+RUN dotnet build --no-restore -c Release -o bin ./Docker.Volumes.MariaDbReuse.WebApi.csproj
+WORKDIR bin
+CMD dotnet Docker.Volumes.MariaDbReuse.WebApi.dll
