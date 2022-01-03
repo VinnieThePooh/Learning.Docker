@@ -31,5 +31,5 @@ app.UseSwaggerUI();
 app.MapControllers();
 
 using var context = app.Services.GetService<SamplesContext>();
-context.Database.Migrate();
+//context.Database.Migrate();
 app.Run();

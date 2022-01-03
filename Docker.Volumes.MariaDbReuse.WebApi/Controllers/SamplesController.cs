@@ -1,3 +1,4 @@
+using Docker.Volumes.MariaDbReuse.WebApi.Extensions;
 using Docker.Volumes.MariaDbReuse.WebApi.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
 namespace Docker.Volumes.MariaDbReuse.WebApi.Controllers;
@@ -30,13 +31,33 @@ public class SamplesController : ControllerBase
     [HttpGet("get-environment")]
     public async Task<IActionResult> GetEnvironmentVariables()
     {
-        var conString = Environment.GetEnvironmentVariable("MARIADB_DB_ConnectionString");        
+        var conString = Environment.GetEnvironmentVariable("MARIADB_DB_ConnectionString");
 
-        return Ok(new EnvironmentDto { 
+        return Ok(new EnvironmentResponse { 
             ConnectionString = conString,
         });
     }
 
+    [HttpGet("check-dbconnection")]
+    public async Task<IActionResult> CheckConnection()
+    {
+        var conString = Environment.GetEnvironmentVariable("MARIADB_DB_ConnectionString");
+
+        try
+        {            
+            using var con = new MySqlConnector.MySqlConnection(conString);            
+            await con.OpenAsync().WithTimeout(TimeSpan.FromSeconds(3));
+            return Ok(ConnectionStatusResponse.Succeded);
+        }
+        catch (TimeoutException)
+        {
+           return Ok(ConnectionStatusResponse.Failed);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.ToString());
+        }
+    }
 
 
     [HttpPost("add-sample")]
