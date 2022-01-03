@@ -14,7 +14,7 @@ services:
   image: mariadb:10.7
   container_name: mariadb
   restart: always
-  command: sh -c "echo $MARIADB_DATABASE"
+  #command: sh -c "echo $MARIADB_DATABASE"
   environment:
    - MARIADB_ROOT_PASSWORD:$MARIADB_ROOT_PASSWORD
    - MARIADB_DATABASE:$MARIADB_DATABASE
