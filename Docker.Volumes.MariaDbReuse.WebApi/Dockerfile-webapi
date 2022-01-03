@@ -1,5 +1,8 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:6.0
-RUN export MARIADB_DB_ConnectionString=${MARIADB_DB_ConnectionString}
+# not sure this right to pass via BUILD arg - need to pass without rebuilding images with different Environments
+ARG MARIADB_DB_ConnectionString
+RUN echo $MARIADB_DB_ConnectionString > /test.txt
+ENV MARIADB_DB_ConnectionString=$MARIADB_DB_ConnectionString
 WORKDIR /webapi-app/bin
 WORKDIR /webapi-app
 COPY . .

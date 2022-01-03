@@ -23,7 +23,7 @@ public class SamplesController : ControllerBase
     [HttpGet("start")]
     public async Task<IActionResult> Start()
     {
-        return Ok("MariaDb WebApi client is ready!");
+        return Ok("WebApi client is ready!");
     }
 
 
