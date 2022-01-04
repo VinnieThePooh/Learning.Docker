@@ -40,5 +40,5 @@ app.MapControllers();
 
 using var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<SamplesContext>();
-//context.Database.Migrate();
+context.Database.Migrate();
 app.Run();

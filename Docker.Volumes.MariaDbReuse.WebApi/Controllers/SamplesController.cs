@@ -1,6 +1,10 @@
+using Docker.Volumes.MariaDbReuse.WebApi.DataAccess;
 using Docker.Volumes.MariaDbReuse.WebApi.Extensions;
+using Docker.Volumes.MariaDbReuse.WebApi.Models;
 using Docker.Volumes.MariaDbReuse.WebApi.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
 namespace Docker.Volumes.MariaDbReuse.WebApi.Controllers;
 
 [ApiController]
@@ -10,18 +14,14 @@ public class SamplesController : ControllerBase
 
     private readonly ILogger<SamplesController> _logger;
     private readonly IConfiguration _config;
+    private readonly SamplesContext _context;
 
-    public SamplesController(ILogger<SamplesController> logger, IConfiguration config)
+    public SamplesController(ILogger<SamplesController> logger, IConfiguration config, SamplesContext context)
     {
         _logger = logger;
         _config = config;
-    }
-
-    [HttpGet("get-samples")]
-    public async Task<IActionResult> GetDemoSamples()
-    {
-        return Ok();
-    }
+        _context = context;
+    }    
 
     [HttpGet("start")]
     public async Task<IActionResult> Start()
@@ -61,12 +61,47 @@ public class SamplesController : ControllerBase
         }
     }
 
-
-    [HttpPost("add-sample")]
-    public async Task<IActionResult> AddNewSample()
+    [HttpPost("insert-sample")]    
+    public async Task<IActionResult> InsertSample(DemoSample sample)
     {
+        if (sample == null)
+            return BadRequest("DemoSample is null");
+        try
+        {
+            _context.Add(sample);
+            await _context.SaveChangesAsync();
+            return Accepted();
+        }
+        catch (TimeoutException)
+        {
+            return Ok(ConnectionStatusResponse.Failed);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.ToString());
+        }
+    }
 
-        return Ok();
+
+
+    [HttpGet("get-samples")]
+    public async Task<IActionResult> GetSamples()
+    {
+        try
+        {            
+            return Ok(new SamplesResponse
+            {
+                Samples = await _context.Samples.ToArrayAsync()
+            });
+        }
+        catch (TimeoutException)
+        {
+            return Ok(ConnectionStatusResponse.Failed);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.ToString());
+        }
     }
 }
  
