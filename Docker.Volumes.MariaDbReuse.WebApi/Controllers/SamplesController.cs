@@ -1,6 +1,7 @@
 using Docker.Volumes.MariaDbReuse.WebApi.DataAccess;
 using Docker.Volumes.MariaDbReuse.WebApi.Extensions;
 using Docker.Volumes.MariaDbReuse.WebApi.Models;
+using Docker.Volumes.MariaDbReuse.WebApi.Models.Dto.Requests;
 using Docker.Volumes.MariaDbReuse.WebApi.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -62,13 +63,16 @@ public class SamplesController : ControllerBase
     }
 
     [HttpPost("insert-sample")]    
-    public async Task<IActionResult> InsertSample(DemoSample sample)
+    public async Task<IActionResult> InsertSample(CreateSampleRequest request)
     {
-        if (sample == null)
-            return BadRequest("DemoSample is null");
+        if (request == null)
+            return BadRequest("Sample data to insert is null");
         try
         {
-            _context.Add(sample);
+            _context.Add(new DemoSample { 
+                Name = request.Name,
+                Description = request.Description,
+            });
             await _context.SaveChangesAsync();
             return Accepted();
         }
