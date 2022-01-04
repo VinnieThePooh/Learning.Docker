@@ -27,11 +27,11 @@ services:
   image: webapi-client:1.1
   build:
    context: ../
-   dockerfile: Docker/Dockerfile-webapi
-   args: 
-    ENVIRONMENT: ${ENVIRONMENT}
+   dockerfile: Docker/Dockerfile-webapi   
   container_name: webapi-client 
-  restart: always  
+  restart: always
+  environment:
+   ASPNETCORE_ENVIRONMENT: ${ENVIRONMENT}
   ports:   
    - 8081:8081
   depends_on:

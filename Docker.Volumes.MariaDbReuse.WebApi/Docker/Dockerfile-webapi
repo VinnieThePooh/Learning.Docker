@@ -1,6 +1,5 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:6.0 as build-env
 # not sure this right to pass via BUILD arg - need to pass without rebuilding images with different Environments
-ARG ENVIRONMENT
 
 WORKDIR /webapi-app/bin
 WORKDIR /webapi-app
@@ -12,9 +11,8 @@ RUN rm -rf bin/Release/net6.0/ref
 
 # create final size-optimized image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
-ARG ENVIRONMENT
 #todo: pass only Environment variable here, pass settings vis bound mount
-ENV ASPNETCORE_ENVIRONMENT=$ENVIRONMENT	
+ENV ASPNETCORE_ENVIRONMENT=
 
 WORKDIR /webapi-app
 COPY --from=build-env /webapi-app/bin/Release/net6.0 .
