@@ -1,9 +1,6 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Docker.Volumes.MariaDbReuse.WebApi.Models.Dtos;
+﻿namespace Docker.Volumes.MariaDbReuse.WebApi.Models.Dtos;
 
 public class EnvironmentResponse
-{
-    [JsonPropertyName("MARIADB_DB_ConnectionString")]
-    public string? ConnectionString { get; set; }
+{   
+    public string? Environment { get; set; }
 }

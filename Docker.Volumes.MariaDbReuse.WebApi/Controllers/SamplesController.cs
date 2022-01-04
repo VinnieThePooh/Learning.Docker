@@ -9,10 +9,12 @@ public class SamplesController : ControllerBase
 {
 
     private readonly ILogger<SamplesController> _logger;
+    private readonly IConfiguration _config;
 
-    public SamplesController(ILogger<SamplesController> logger)
+    public SamplesController(ILogger<SamplesController> logger, IConfiguration config)
     {
         _logger = logger;
+        _config = config;
     }
 
     [HttpGet("get-samples")]
@@ -31,21 +33,21 @@ public class SamplesController : ControllerBase
     [HttpGet("get-environment")]
     public async Task<IActionResult> GetEnvironmentVariables()
     {
-        var conString = Environment.GetEnvironmentVariable("MARIADB_DB_ConnectionString");
+        var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
         return Ok(new EnvironmentResponse { 
-            ConnectionString = conString,
+            Environment = env,
         });
     }
 
     [HttpGet("check-dbconnection")]
     public async Task<IActionResult> CheckConnection()
     {
-        var conString = Environment.GetEnvironmentVariable("MARIADB_DB_ConnectionString");
+        var conString = _config.GetConnectionString("DefaultConnection");
 
         try
         {            
-            using var con = new MySqlConnector.MySqlConnection(conString);            
+            using var con = new MySqlConnector.MySqlConnection(conString);
             await con.OpenAsync().WithTimeout(TimeSpan.FromSeconds(3));
             return Ok(ConnectionStatusResponse.Succeded);
         }
