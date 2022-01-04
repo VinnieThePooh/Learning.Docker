@@ -1,12 +1,19 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:6.0
+﻿FROM mcr.microsoft.com/dotnet/sdk:6.0 as build-env
 # not sure this right to pass via BUILD arg - need to pass without rebuilding images with different Environments
 ARG MARIADB_DB_ConnectionString
-RUN echo $MARIADB_DB_ConnectionString > /test.txt
-ENV MARIADB_DB_ConnectionString=$MARIADB_DB_ConnectionString
+
 WORKDIR /webapi-app/bin
 WORKDIR /webapi-app
+
 COPY . .
-RUN dotnet restore ./Docker.Volumes.MariaDbReuse.WebApi.csproj
-RUN dotnet build --no-restore -c Release -o bin ./Docker.Volumes.MariaDbReuse.WebApi.csproj
-WORKDIR bin
-CMD dotnet Docker.Volumes.MariaDbReuse.WebApi.dll
+RUN dotnet restore
+RUN dotnet publish --no-restore -f net6.0 -c Release -o bin
+
+# create final size-optimized image
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
+ARG MARIADB_DB_ConnectionString
+ENV MARIADB_DB_ConnectionString=$MARIADB_DB_ConnectionString
+
+WORKDIR /webapi-app
+COPY --from=build-env /webapi-app/bin/Release/net6.0 .
+ENTRYPOINT ["dotnet", "Docker.Volumes.MariaDbReuse.WebApi.dll"]

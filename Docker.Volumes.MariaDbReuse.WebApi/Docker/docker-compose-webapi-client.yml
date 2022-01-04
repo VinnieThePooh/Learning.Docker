@@ -13,8 +13,7 @@ services:
   hostname: ${MARIADB_HOST}
   image: mariadb:10.7
   container_name: mariadb
-  restart: always
-  #command: sh -c "echo $MARIADB_DATABASE"
+  restart: always 
   environment:
    - MARIADB_ROOT_PASSWORD:$MARIADB_ROOT_PASSWORD
    - MARIADB_DATABASE:$MARIADB_DATABASE
@@ -24,13 +23,13 @@ services:
   - mariadb-network
  
  webapi-client:
-  image: webapi-client
+  image: webapi-client:1.1
   build:
    context: ../
    dockerfile: Docker/Dockerfile-webapi
    args: 
     MARIADB_DB_ConnectionString: ${MARIADB_DB}
-  container_name: webapi-client
+  container_name: webapi-client 
   restart: always  
   ports:   
    - 8081:8081
