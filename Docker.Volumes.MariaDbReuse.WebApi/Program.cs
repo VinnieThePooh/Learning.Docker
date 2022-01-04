@@ -1,14 +1,22 @@
 using Docker.Volumes.MariaDbReuse.WebApi.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);    
-builder.Configuration.AddEnvironmentVariables();
+var builder = WebApplication.CreateBuilder(args);
+
+var isProd = builder.Environment.IsEnvironment(Environments.Production);
+var envName = builder.Environment.EnvironmentName;
+
+builder.Configuration
+    .AddEnvironmentVariables()
+    .AddJsonFile($"appsettings{(isProd ? string.Empty: "." + envName)}.json", false);
+
+var conString = builder.Configuration.GetConnectionString("DefaultConnection");
+Console.WriteLine($"Environment: {(!string.IsNullOrEmpty(envName) ? envName: Environments.Production)}");
+Console.WriteLine($"Connection string: {(!string.IsNullOrEmpty(conString) ? conString : "NULL")}");
+
 builder.WebHost.ConfigureKestrel(options => {
     options.ListenAnyIP(8081);     
 });
-
-var conString = Environment.GetEnvironmentVariable("MARIADB_DB_ConnectionString");
-Console.WriteLine($"Connection string: {(!string.IsNullOrEmpty(conString) ? conString: "NULL")}");
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -30,6 +38,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.MapControllers();
 
-using var context = app.Services.GetService<SamplesContext>();
+using var scope = app.Services.CreateScope();
+var context = scope.ServiceProvider.GetRequiredService<SamplesContext>();
 //context.Database.Migrate();
 app.Run();

@@ -1,10 +1,11 @@
 ﻿version: "3.9"
 
+#just reference
 x-docker-envs: &x-envs
  environment:
   - MARIADB_ROOT_PASSWORD:${MARIADB_ROOT_PASSWORD}
   - MYSQL_ROOT_PASSWORD:${MARIADB_ROOT_PASSWORD}
-  - MARIADB_DB_ConnectionString:${MARIADB_DB}
+  - ASPNETCORE_ENVIRONMENT:${ENVIRONMENT}
   - MARIADB_HOST:${MARIADB_HOST}
   - MARIADB_DATABASE:${MARIADB_DATABASE}
    
@@ -28,7 +29,7 @@ services:
    context: ../
    dockerfile: Docker/Dockerfile-webapi
    args: 
-    MARIADB_DB_ConnectionString: ${MARIADB_DB}
+    ENVIRONMENT: ${ENVIRONMENT}
   container_name: webapi-client 
   restart: always  
   ports:   
