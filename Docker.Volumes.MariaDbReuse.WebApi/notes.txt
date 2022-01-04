@@ -6,13 +6,11 @@ To run two different mariadb containers (client and server) with communication:
 1. Create network
 docker network create mariadb-network
 
-1. Run mariadb:10.7 dbms instance:
+2. Run mariadb:10.7 dbms instance:
 docker run --detach --name mariadb_v10p7  --network mariadb-network  --env MARIADB_USER=example-user --env MARIADB_PASSWORD=my_cool_secret --env MARIADB_ROOT_PASSWORD=my-secret-pw  mariadb:10.7
 
-2. Run client container: (mariadb too)
+3. Run client container: (mariadb too)
 docker run -it --network mariadb-network --rm mariadb mysql -h mariadb_v10p7 -u example-user -p
-
-
 
 -- Second way
 1. Run docker-compose (if exists)
