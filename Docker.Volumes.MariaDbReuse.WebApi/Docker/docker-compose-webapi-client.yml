@@ -17,8 +17,8 @@ services:
   environment:
    MARIADB_ROOT_PASSWORD: $MARIADB_ROOT_PASSWORD
    MARIADB_DATABASE: $MARIADB_DATABASE
-  #volumes:
-  # - ./mariadb/data:/var/lib/mysql
+  volumes:
+   - E:\containers-data\maria-10.7:/var/lib/mysql
   networks:
   - mariadb-network
  
