@@ -8,6 +8,7 @@ WORKDIR /webapi-app
 COPY . .
 RUN dotnet restore
 RUN dotnet publish --no-restore -f net6.0 -c Release -o bin
+RUN rm -rf bin/Release/net6.0/ref
 
 # create final size-optimized image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
