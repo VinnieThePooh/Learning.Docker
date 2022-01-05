@@ -9,6 +9,7 @@ RUN rm -rf bin/Release/net6.0/ref
 
 # create final size-optimized image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
+ENV Logging__Console__FormatterName=Simple
 ENV ASPNETCORE_ENVIRONMENT=
 
 WORKDIR /webapi-app
