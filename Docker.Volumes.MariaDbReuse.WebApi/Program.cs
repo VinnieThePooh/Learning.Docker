@@ -6,9 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 var isProd = builder.Environment.IsEnvironment(Environments.Production);
 var envName = builder.Environment.EnvironmentName;
 
-builder.Configuration
-    .AddEnvironmentVariables()
-    .AddJsonFile($"appsettings{(isProd ? string.Empty: "." + envName)}.json", false);
+builder.Configuration    
+    .AddJsonFile($"appsettings{(isProd ? string.Empty: "." + envName)}.json", false)
+    .AddEnvironmentVariables();
 
 var conString = builder.Configuration.GetConnectionString("DefaultConnection");
 Console.WriteLine($"Environment: {(!string.IsNullOrEmpty(envName) ? envName: Environments.Production)}");
