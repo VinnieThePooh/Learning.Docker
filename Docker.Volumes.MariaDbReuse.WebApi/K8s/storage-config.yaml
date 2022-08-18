@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-demo
+data:
+  # property-like keys; each key maps to a simple value
+  database_host: mariadb-service
+  database_name: ProductionDb
+  environment: Development;
