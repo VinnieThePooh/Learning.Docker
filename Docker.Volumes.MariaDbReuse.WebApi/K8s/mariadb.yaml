@@ -3,22 +3,25 @@ kind: Deployment
 metadata:
   name: mariadb-deployment
   labels:
-    app: mariadb
+    app: webapi-with-db
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mariadb
+      app: webapi-with-db
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
-        app: mariadb
+        app: webapi-with-db
     spec:
       containers:
         - name: mariadb
           image: mariadb:10.7
           ports:
             - containerPort: 3306
+              name: mariadb
           env:
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
@@ -30,16 +33,38 @@ spec:
                 configMapKeyRef: 
                   name: configmap-demo
                   key: database_name
+          volumeMounts: 
+            - name: mariadb-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes: 
+      - name: mariadb-persistent-storage
+        persistentVolumeClaim:
+          claimName: mariadb-pv-claim
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: mariadb-service
+  labels:
+    app: webapi-with-db
 spec:
   selector:
     #app.kubernetes.io/name: MyApp
-    app: mariadb
+    app: webapi-with-db
   ports:
     - protocol: TCP
       port: 3306
       targetPort: 3306
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mariadb-pv-claim
+  labels:
+    app: webapi-with-db
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
