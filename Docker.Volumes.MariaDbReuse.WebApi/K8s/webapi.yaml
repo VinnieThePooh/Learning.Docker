@@ -19,6 +19,7 @@ spec:
       containers:
         - name: webapi-client
           image: webapi-client:1.1
+          imagePullPolicy: Never
           ports:
             - containerPort: 8081
           env:
@@ -28,10 +29,10 @@ spec:
                   name: configmap-demo 
                   key: environment
           volumeMounts:
-            - name: configs-persistent-storage
-              mountPath: /app/configs
+            - name: config-local-pv
+              mountPath: /app/configs          
       volumes: 
-      - name: configs-persistent-storage
+      - name: config-local-pv
         persistentVolumeClaim:
           claimName: configs-pv-claim
 ---
@@ -63,4 +64,4 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 20M
+      storage: 20Mi

@@ -34,13 +34,10 @@ spec:
                   name: configmap-demo
                   key: database_name
           volumeMounts: 
-            - name: mariadb-persistent-storage
+            - name: mariadb-local-pv
               mountPath: /var/lib/mysql
-      volumes: 
-      - name: mariadb-persistent-storage
-        persistentVolumeClaim:
-          claimName: mariadb-pv-claim
----
+      volumes:
+      - name: mariadb-local-pv
 apiVersion: v1
 kind: Service
 metadata:
